@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../html/shared/db_config.cfg
+source ../html/shared/config.cfg
 
 MUSER="$db_updates_user"
 MPASS="$db_updates_password"
