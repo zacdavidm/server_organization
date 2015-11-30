@@ -87,14 +87,13 @@ if [ ! -d "/etc/httpd/sites-available/" ]; then
 "<VirtualHost *:80>
   ServerName www.$new_domain.dev
   ServerAlias $new_domain.dev accounts.$new_domain.dev housing.$new_domain.dev digital.$new_domain.dev
-  DocumentRoot /var/www/exampleorg/$branch_name/html/current
-  ErrorLog /var/www/exampleorg/$branch_name/logs/error.log
-  <Directory /var/www/exampleorg/$branch_name/html/current>
+  DocumentRoot /var/www/$www_dir/$branch_name/html/current
+  ErrorLog /var/www/$www_dir/$branch_name/logs/error.log
+  <Directory /var/www/$www_dir/$branch_name/html/current>
     AllowOverride All
   </Directory>
 </VirtualHost>"
 
-  exit 4
 else
   touch /etc/httpd/sites-available/$host_prefix$branch_name.conf
 
@@ -102,9 +101,9 @@ else
   echo "<VirtualHost *:80>
     ServerName www.$new_domain.dev
     ServerAlias $new_domain.dev accounts.$new_domain.dev housing.$new_domain.dev digital.$new_domain.dev
-    DocumentRoot /var/www/exampleorg/$branch_name/html/current
-    ErrorLog /var/www/exampleorg/$branch_name/logs/error.log
-    <Directory /var/www/exampleorg/$branch_name/html/current>
+    DocumentRoot /var/www/$www_dir/$branch_name/html/current
+    ErrorLog /var/www/$www_dir/$branch_name/logs/error.log
+    <Directory /var/www/$www_dir/$branch_name/html/current>
       AllowOverride All
     </Directory>
   </VirtualHost>" > /etc/httpd/sites-available/$host_prefix$branch_name.conf
@@ -112,7 +111,7 @@ else
   ln -s /etc/httpd/sites-available/$host_prefix$branch_name.conf /etc/httpd/sites-enabled/$host_prefix$branch_name.conf
 fi
 
-ip_addr=ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'
+ip_addr="$(ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')"
 
 #echo out hosts file lines
 echo "Enter the following lines in your /etc/hosts file"
